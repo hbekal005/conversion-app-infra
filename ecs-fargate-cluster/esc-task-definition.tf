@@ -14,8 +14,8 @@ resource "aws_ecs_task_definition" "ecs-task-definition" {
       essential = true
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = lookup(var, "${terraform.workspace}_container_port")
+          hostPort      = lookup(var, "${terraform.workspace}_ecs_host_port")
         }
       ]
     }

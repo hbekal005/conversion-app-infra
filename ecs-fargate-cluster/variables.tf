@@ -55,60 +55,10 @@ variable "all_cidr_block" {
   default     = "0.0.0.0/0"
 }
 
+#Production Environment Variables
 variable "prod_vpc_cidr_block" {
   description = "CIDR Block for the PROD VPC"
   type        = string
-}
-
-variable "stg_vpc_cidr_block" {
-  description = "CIDR Block for the STAGE VPC"
-  type        = string
-}
-
-variable "dev_vpc_cidr_block" {
-  description = "CIDR Block for the DEV VPC"
-  type        = string
-}
-
-
-variable "application_image_name" {
-  description = "The Docker image for the ECS task"
-  type        = string
-}
-
-variable "application_image_version" {
-  description = "The version of the Docker image for the ECS task"
-  type        = string
-  default     = "latest"
-}
-variable "dev_ecs_task_cpu" {
-  description = "The number of CPU units for the DEV ECS task"
-  type        = number
-}
-
-variable "dev_ecs_task_memory" {
-  description = "The amount of memory (in MiB) for the DEV ECS task"
-  type        = number
-}
-
-variable "dev_container_port" {
-  description = "Container Port for DEV application"
-  type = number
-}
-
-variable "stg_ecs_task_cpu" {
-  description = "The number of CPU units for the STAGE ECS task"
-  type        = number
-}
-
-variable "stg_ecs_task_memory" {
-  description = "The amount of memory (in MiB) for the STAGE ECS task"
-  type        = number
-}
-
-variable "stg_container_port" {
-  description = "Container Port for DEV application"
-  type = number
 }
 
 variable "prod_ecs_task_cpu" {
@@ -125,5 +75,79 @@ variable "prod_container_port" {
   description = "Container Port for DEV application"
   type = number
 }
+
+variable "prod_ecs_host_port" {
+  description = "EC2 HOST Port for DEV application"
+  type = number
+}
+
+# Stage Environment Variables
+variable "stg_vpc_cidr_block" {
+  description = "CIDR Block for the STAGE VPC"
+  type        = string
+}
+
+variable "stg_ecs_task_cpu" {
+  description = "The number of CPU units for the STAGE ECS task"
+  type        = number
+}
+
+variable "stg_ecs_task_memory" {
+  description = "The amount of memory (in MiB) for the STAGE ECS task"
+  type        = number
+}
+
+variable "stg_container_port" {
+  description = "Container Port for STG application"
+  type = number
+}
+
+variable "stg_ecs_host_port" {
+  description = "EC2 HOST Port for STAGE application"
+  type = number
+}
+
+# Dev Environment Variables
+variable "dev_vpc_cidr_block" {
+  description = "CIDR Block for the DEV VPC"
+  type        = string
+}
+
+variable "dev_ecs_task_cpu" {
+  description = "The number of CPU units for the DEV ECS task"
+  type        = number
+}
+
+variable "dev_ecs_task_memory" {
+  description = "The amount of memory (in MiB) for the DEV ECS task"
+  type        = number
+}
+
+variable "dev_container_port" {
+  description = "Container Port for DEV application"
+  type = number
+}
+
+variable "dev_ecs_host_port" {
+  description = "EC2 HOST Port for DEV application"
+  type = number
+}
+
+# Application Images Variables
+variable "application_image_name" {
+  description = "The Docker image for the ECS task"
+  type        = string
+}
+
+variable "application_image_version" {
+  description = "The version of the Docker image for the ECS task"
+  type        = string
+  default     = "latest"
+}
+
+
+
+
+
 
 

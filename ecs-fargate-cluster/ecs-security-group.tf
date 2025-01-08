@@ -4,8 +4,8 @@ resource "aws_security_group" "ecs-security-group-lb" {
   vpc_id      = aws_vpc.conversion-app-vpc.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = lookup(var, "${terraform.workspace}_ecs_host_port")
+    to_port     = lookup(var, "${terraform.workspace}_container_port")
     protocol    = "tcp"
     cidr_blocks = [var.all_cidr_block]
   }
@@ -28,8 +28,8 @@ resource "aws_security_group" "ecs-tasks-sg" {
   vpc_id      = aws_vpc.conversion-app-vpc.id
   ingress {
     protocol        = "tcp"
-    from_port       = 80
-    to_port         = 80
+    from_port       = lookup(var, "${terraform.workspace}_ecs_host_port")
+    to_port         = lookup(var, "${terraform.workspace}_container_port")
     cidr_blocks     = [var.all_cidr_block]
     security_groups = [aws_security_group.ecs-security-group-lb.id]
   }

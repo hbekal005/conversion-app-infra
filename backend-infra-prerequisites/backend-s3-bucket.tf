@@ -2,7 +2,7 @@
 resource "aws_s3_bucket" "backend_s3_bucket" {
   bucket = var.terraform_s3_bucket
 
-  depends_on = [aws_dynamodb_table.tableName]
+  depends_on = [aws_dynamodb_table.backend_table]
 }
 
 resource "aws_s3_bucket_versioning" "backend_s3_bucket_versioning" {

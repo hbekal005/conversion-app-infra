@@ -12,16 +12,22 @@ app_count                = 2
 prod_vpc_cidr_block  = "10.0.0.0/16"
 prod_ecs_task_cpu    = 2048
 prod_ecs_task_memory = 4096
+prod_container_port  = 8080
+prod_ecs_host_port   = 8080
 
-# Staging environment Specific variabless
+# Staging environment Specific variables
 stg_vpc_cidr_block  = "10.1.0.0/16"
 stg_ecs_task_cpu    = 1024
 stg_ecs_task_memory = 2048
+stg_container_port  = 8080
+stg_ecs_host_port   = 8080
 
 # Development environment Specific variables
 dev_vpc_cidr_block  = "10.2.0.0/16"
 dev_ecs_task_cpu    = 1024
 dev_ecs_task_memory = 2048
+dev_container_port  = 8080
+dev_ecs_host_port   = 8080
 
 #Applicaiton related variables
 application_image_name    = "conversion-app"

@@ -4,7 +4,6 @@ variable "AWS_REGION" {
   default     = "us-east-1"
 }
 
-
 variable "terraform_s3_bucket" {
   description = "The name of the S3 bucket to store the Terraform state file"
   type        = string

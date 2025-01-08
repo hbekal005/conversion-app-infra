@@ -1,7 +1,7 @@
 # Create an Application Load Balancer for the ECS Cluster
 resource "aws_lb" "ecs-cluster-lb" {
   name               = "${terraform.workspace}-ecs-cluster-lb"
-  subnets            = aws_subnet.ecs-public-subnet[*].id
+  subnets            = [aws_subnet.ecs-subnet-01.id, aws_subnet.ecs-subnet-02.id]
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecs-security-group-lb.id]
 
@@ -11,9 +11,9 @@ resource "aws_lb" "ecs-cluster-lb" {
 }
 
 # Create a Listener for the Application Load Balancer
-resource "aws_lb_listener" "https-forward" {
+resource "aws_lb_listener" "alb-http-listener" {
   load_balancer_arn = aws_lb.ecs-cluster-lb.arn
-  port              = 80
+  port              = lookup(var, "${terraform.workspace}_ecs_host_port")
   protocol          = "HTTP"
 
   default_action {
