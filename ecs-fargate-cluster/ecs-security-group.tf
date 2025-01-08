@@ -1,7 +1,7 @@
 resource "aws_security_group" "ecs-security-group-lb" {
   name        = "${terraform.workspace}_ecs_security_group_lb"
   description = "Security group for ECS Load Balancer control acess to the ALB"
-  vpc_id      = ""
+  vpc_id      = aws_vpc.conversion-app-vpc.id
 
   ingress {
     from_port   = 80
@@ -25,7 +25,7 @@ resource "aws_security_group" "ecs-security-group-lb" {
 resource "aws_security_group" "ecs-tasks-sg" {
   name        = "${terraform.workspace}-ecs-tasks-sg"
   description = "Inbound access from the ALB only"
-  vpc_id      = ""
+  vpc_id      = aws_vpc.conversion-app-vpc.id
   ingress {
     protocol        = "tcp"
     from_port       = 80

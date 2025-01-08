@@ -91,6 +91,11 @@ variable "dev_ecs_task_memory" {
   type        = number
 }
 
+variable "dev_container_port" {
+  description = "Container Port for DEV application"
+  type = number
+}
+
 variable "stg_ecs_task_cpu" {
   description = "The number of CPU units for the STAGE ECS task"
   type        = number
@@ -99,6 +104,11 @@ variable "stg_ecs_task_cpu" {
 variable "stg_ecs_task_memory" {
   description = "The amount of memory (in MiB) for the STAGE ECS task"
   type        = number
+}
+
+variable "stg_container_port" {
+  description = "Container Port for DEV application"
+  type = number
 }
 
 variable "prod_ecs_task_cpu" {
@@ -111,5 +121,9 @@ variable "prod_ecs_task_memory" {
   type        = number
 }
 
+variable "prod_container_port" {
+  description = "Container Port for DEV application"
+  type = number
+}
 
 
