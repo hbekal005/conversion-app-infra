@@ -1,0 +1,58 @@
+name : Terraform Backend Infrastructure
+run-name: Terraform_Backend_Infra_Creation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Create_Update_Backend_Infra:
+    name: Create or Update Backend Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infra Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        id: setup-terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.10'
+
+      - name: Terraform Init for Backend Prerequisites
+        id: terraform-backend-init
+        run: |
+            cd ${{ github.workspace }}/backend-infra-prerequisites
+            terraform init
+
+      - name: Terraform Validate for Backend Prerequisites
+        id: terraform-backend-validate
+        if: success()
+        run: |
+            cd ${{ github.workspace }}/backend-infra-prerequisites
+            terraform validate
+
+      - name: Terraform Plan for Backend Prerequisites
+        id: terraform-backend-plan
+        if: success()
+        run: |
+            cd ${{ github.workspace }}/backend-infra-prerequisites
+            terraform plan \
+              -var 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' \
+              -var 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
+              -out=backend-tfplan
+
+      - name: Terraform Apply for Backend Prerequisites
+        id: terraform-backend-apply
+        if: success()
+        run: | 
+            cd ${{ github.workspace }}/conversion-app-infra/backend-infra-prerequisites
+            terraform apply -auto-approve "backend-tfplan"
+      
+      - name: Backend Prerequisites Outputs
+        id: set-backend-outputs
+        if: success()
+        run: |
+            cd ${{ github.workspace }}/conversion-app-infra/backend-infra-prerequisites
+            echo "backend_s3_bucket=$(terraform output -raw backend_s3_bucket)"
+            echo "backend_dynamodb_table=$(terraform output -raw backend_dynamodb_table)"
+    
