@@ -45,14 +45,14 @@ jobs:
         id: terraform-backend-apply
         if: success()
         run: | 
-            cd ${{ github.workspace }}/conversion-app-infra/backend-infra-prerequisites
+            cd ${{ github.workspace }}/backend-infra-prerequisites
             terraform apply -auto-approve "backend-tfplan"
       
       - name: Backend Prerequisites Outputs
         id: set-backend-outputs
         if: success()
         run: |
-            cd ${{ github.workspace }}/conversion-app-infra/backend-infra-prerequisites
+            cd ${{ github.workspace }}/backend-infra-prerequisites
             echo "backend_s3_bucket=$(terraform output -raw backend_s3_bucket)"
             echo "backend_dynamodb_table=$(terraform output -raw backend_dynamodb_table)"
     
