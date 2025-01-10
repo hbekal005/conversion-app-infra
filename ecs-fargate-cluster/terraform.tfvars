@@ -8,26 +8,36 @@ subnet_count             = 2
 subnet_mask              = 8
 app_count                = 2
 
-# Production environment Specific variables
-prod_vpc_cidr_block  = "10.0.0.0/16"
-prod_ecs_task_cpu    = 2048
-prod_ecs_task_memory = 4096
-prod_container_port  = 8080
-prod_ecs_host_port   = 8080
 
-# Staging environment Specific variables
-stg_vpc_cidr_block  = "10.1.0.0/16"
-stg_ecs_task_cpu    = 1024
-stg_ecs_task_memory = 2048
-stg_container_port  = 8080
-stg_ecs_host_port   = 8080
+vpc_cidr_block = {
+  prod = "10.0.0.0/16"
+  stg  = "10.1.0.0/16"
+  dev  = "10.2.0.0/16"
+}
 
-# Development environment Specific variables
-dev_vpc_cidr_block  = "10.2.0.0/16"
-dev_ecs_task_cpu    = 1024
-dev_ecs_task_memory = 2048
-dev_container_port  = 8080
-dev_ecs_host_port   = 8080
+ecs_task_cpu = {
+  prod = 2048
+  stg  = 1024
+  dev  = 1024
+}
+
+ecs_task_memory = {
+  prod = 4096
+  stg  = 2048
+  dev  = 2048
+}
+
+container_port = {
+  prod = 80
+  stg  = 80
+  dev  = 80
+}
+
+ecs_host_port = {
+  prod = 80
+  stg  = 80
+  dev  = 80
+}
 
 #Applicaiton related variables
 application_image_name    = "conversion-app"

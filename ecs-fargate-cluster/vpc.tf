@@ -1,11 +1,11 @@
-# Using Data Source to get the available zones in the region
-data "aws_availability_zones" "available-zones" {
-  state = "available-zones"
+# Declare the availability zone data source
+data "aws_availability_zones" "ecs-available-zones" {
+  state = "available"
 }
 
 # Creating a VPC
 resource "aws_vpc" "conversion-app-vpc" {
-  cidr_block       = lookup(var, "${terraform.workspace}_vpc_cidr_block")
+  cidr_block       = var.vpc_cidr_block[terraform.workspace]
   instance_tenancy = "default"
 
   tags = {
@@ -13,30 +13,26 @@ resource "aws_vpc" "conversion-app-vpc" {
   }
 }
 
-# Create Subnets for VPC
+#Creating all the public resources for the VPC
 
-# The count parameter is used to create multiple subnets
+# Creating  subnet
 # The cidrsubnet function is used to calculate the CIDR block for each subnet
-# The availability_zone parameter is used to specify the availability zone for each subnet
 resource "aws_subnet" "ecs-subnet-01" {
-  count = var.subnet_count
-  vpc_id     = aws_vpc.conversion-app-vpc.id
-  cidr_block = cidrsubnet(lookup(var, "${terraform.workspace}_vpc_cidr_block"), var.subnet_mask, count.index)
-  availability_zone = data.aws_availability_zones.available-zones.names[count.index]
+  vpc_id                  = aws_vpc.conversion-app-vpc.id
+  cidr_block              = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count)
+  availability_zone       = element(data.aws_availability_zones.ecs-available-zones.names, 0)
   map_public_ip_on_launch = true
   tags = {
-    Name = "ecs-subnet-${count.index}"
+    Name = "${terraform.workspace}-ecs-subnet-01"
   }
 }
 
 resource "aws_subnet" "ecs-subnet-02" {
-  count = var.subnet_count
-  vpc_id     = aws_vpc.conversion-app-vpc.id
-  cidr_block = cidrsubnet(lookup(var, "${terraform.workspace}_vpc_cidr_block"), var.subnet_mask, count.index + 1)
-  availability_zone = data.aws_availability_zones.available-zones.names[count.index + 1]
-  map_customer_owned_ip_on_launch = true
+  vpc_id            = aws_vpc.conversion-app-vpc.id
+  cidr_block        = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count + 1)
+  availability_zone = element(data.aws_availability_zones.ecs-available-zones.names, 1)
   tags = {
-    Name = "ecs-subnet-${count.index + 1}"
+    Name = "${terraform.workspace}-ecs-subnet-02"
   }
 }
 
@@ -49,23 +45,42 @@ resource "aws_internet_gateway" "conversion-app-igw" {
   }
 }
 
-# Creating a route table
-resource "aws_route_table" "ecs-route-table" {
-  vpc_id = aws_vpc.conversion-app-vpc.id
 
+# Creating a ECS Route Table
+resource "aws_route_table" "ecs-route-table-01" {
+  vpc_id = aws_vpc.conversion-app-vpc.id
   tags = {
-    Name = "${terraform.workspace}-ecs-route-table"
+    Name = "${terraform.workspace}-ecs-route-table-01"
   }
 }
 
-# Associating the route table with the subnet
-resource "aws_route_table_association" "rtb-association-01" {
-  subnet_id = aws_subnet.ecs-subnet-01.id
-  route_table_id  = aws_route_table.ecs-route-table.id
+resource "aws_route_table" "ecs-route-table-02" {
+  vpc_id = aws_vpc.conversion-app-vpc.id
+  tags = {
+    Name = "${terraform.workspace}-ecs-route-table-01"
+  }
 }
 
-# Associating the route table with the subnet
-resource "aws_route_table_association" "rtb-association-02" {
-  subnet_id = aws_subnet.ecs-subnet-02.id
-  route_table_id  = aws_route_table.ecs-route-table.id
+# Create Routes for the ECS Route Table
+resource "aws_route" "ecs-route-01" {
+  route_table_id         = aws_route_table.ecs-route-table-01.id
+  destination_cidr_block = var.all_cidr_block
+  gateway_id             = aws_internet_gateway.conversion-app-igw.id
+}
+
+resource "aws_route" "ecs-route-02" {
+  route_table_id         = aws_route_table.ecs-route-table-02.id
+  destination_cidr_block = var.all_cidr_block
+  gateway_id             = aws_internet_gateway.conversion-app-igw.id
+}
+
+#Route Table Association
+resource "aws_route_table_association" "rtb-subnet-association-01" {
+  subnet_id      = aws_subnet.ecs-subnet-01.id
+  route_table_id = aws_route_table.ecs-route-table-01.id
+}
+
+resource "aws_route_table_association" "rtb-subnet-association-02" {
+  subnet_id      = aws_subnet.ecs-subnet-02.id
+  route_table_id = aws_route_table.ecs-route-table-02.id
 }

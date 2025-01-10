@@ -4,7 +4,6 @@ variable "AWS_REGION" {
   default     = "us-east-1"
 }
 
-
 variable "terraform_s3_bucket" {
   description = "The name of the S3 bucket to store the Terraform state file"
   type        = string
@@ -55,82 +54,29 @@ variable "all_cidr_block" {
   default     = "0.0.0.0/0"
 }
 
-#Production Environment Variables
-variable "prod_vpc_cidr_block" {
-  description = "CIDR Block for the PROD VPC"
-  type        = string
+variable "vpc_cidr_block" {
+  description = "CIDR Block for the  VPC"
+  type        = map(string)
 }
 
-variable "prod_ecs_task_cpu" {
-  description = "The number of CPU units for the PROD ECS task"
-  type        = number
+variable "ecs_task_cpu" {
+  description = "The number of CPU units for the  ECS task"
+  type        = map(number)
 }
 
-variable "prod_ecs_task_memory" {
-  description = "The amount of memory (in MiB) for the PROD ECS task"
-  type        = number
+variable "ecs_task_memory" {
+  description = "The amount of memory (in MiB) for the  ECS task"
+  type        = map(number)
 }
 
-variable "prod_container_port" {
-  description = "Container Port for DEV application"
-  type = number
+variable "container_port" {
+  description = "Container Port for application"
+  type        = map(number)
 }
 
-variable "prod_ecs_host_port" {
-  description = "EC2 HOST Port for DEV application"
-  type = number
-}
-
-# Stage Environment Variables
-variable "stg_vpc_cidr_block" {
-  description = "CIDR Block for the STAGE VPC"
-  type        = string
-}
-
-variable "stg_ecs_task_cpu" {
-  description = "The number of CPU units for the STAGE ECS task"
-  type        = number
-}
-
-variable "stg_ecs_task_memory" {
-  description = "The amount of memory (in MiB) for the STAGE ECS task"
-  type        = number
-}
-
-variable "stg_container_port" {
-  description = "Container Port for STG application"
-  type = number
-}
-
-variable "stg_ecs_host_port" {
-  description = "EC2 HOST Port for STAGE application"
-  type = number
-}
-
-# Dev Environment Variables
-variable "dev_vpc_cidr_block" {
-  description = "CIDR Block for the DEV VPC"
-  type        = string
-}
-
-variable "dev_ecs_task_cpu" {
-  description = "The number of CPU units for the DEV ECS task"
-  type        = number
-}
-
-variable "dev_ecs_task_memory" {
-  description = "The amount of memory (in MiB) for the DEV ECS task"
-  type        = number
-}
-
-variable "dev_container_port" {
-  description = "Container Port for DEV application"
-  type = number
-}
-
-variable "dev_ecs_host_port" {
-  description = "EC2 HOST Port for DEV application"
-  type = number
+variable "ecs_host_port" {
+  description = "EC2 HOST Port for  ECS"
+  type        = map(number)
 }
 
 # Application Images Variables
