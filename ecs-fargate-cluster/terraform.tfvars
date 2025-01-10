@@ -28,15 +28,15 @@ ecs_task_memory = {
 }
 
 container_port = {
-  prod = 80
-  stg  = 80
-  dev  = 80
+  prod = 8080
+  stg  = 8080
+  dev  = 8080
 }
 
 ecs_host_port = {
-  prod = 80
-  stg  = 80
-  dev  = 80
+  prod = 8080
+  stg  = 8080
+  dev  = 8080
 }
 
 #Applicaiton related variables

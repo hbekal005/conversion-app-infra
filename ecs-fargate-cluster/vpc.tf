@@ -28,18 +28,32 @@ resource "aws_subnet" "ecs-subnet-01" {
 }
 
 resource "aws_subnet" "ecs-subnet-02" {
-  vpc_id            = aws_vpc.conversion-app-vpc.id
-  cidr_block        = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count + 1)
-  availability_zone = element(data.aws_availability_zones.ecs-available-zones.names, 1)
+  vpc_id     = aws_vpc.conversion-app-vpc.id
+  cidr_block = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count + 1)
   tags = {
     Name = "${terraform.workspace}-ecs-subnet-02"
   }
 }
 
+
+
+
 # Creating an internet gateway
 resource "aws_internet_gateway" "conversion-app-igw" {
   vpc_id = aws_vpc.conversion-app-vpc.id
 
+  tags = {
+    Name = "${terraform.workspace}-conversion-app-igw"
+  }
+}
+
+resource "aws_eip" "elastic-ip" {
+  domain = "vpc"
+}
+
+resource "aws_nat_gateway" "conversion-app-nat-gw" {
+  allocation_id = aws_eip.elastic-ip.id
+  subnet_id     = aws_subnet.ecs-subnet-01.id
   tags = {
     Name = "${terraform.workspace}-conversion-app-igw"
   }
@@ -71,7 +85,7 @@ resource "aws_route" "ecs-route-01" {
 resource "aws_route" "ecs-route-02" {
   route_table_id         = aws_route_table.ecs-route-table-02.id
   destination_cidr_block = var.all_cidr_block
-  gateway_id             = aws_internet_gateway.conversion-app-igw.id
+  gateway_id             = aws_nat_gateway.conversion-app-nat-gw.id
 }
 
 #Route Table Association

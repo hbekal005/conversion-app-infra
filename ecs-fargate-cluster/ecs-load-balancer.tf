@@ -14,7 +14,7 @@ resource "aws_lb" "ecs-cluster-lb" {
 # Create a Listener for the Application Load Balancer
 resource "aws_lb_listener" "alb-http-listener" {
   load_balancer_arn = aws_lb.ecs-cluster-lb.arn
-  port              = var.ecs_host_port[terraform.workspace]
+  port              = 80
   protocol          = "HTTP"
 
   default_action {

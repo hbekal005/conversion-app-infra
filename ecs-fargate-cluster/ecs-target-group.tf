@@ -8,4 +8,14 @@ resource "aws_lb_target_group" "ecs-target-group" {
   tags = {
     Name = "${terraform.workspace}-ecs-target-group"
   }
+
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "90"
+    protocol            = "HTTP"
+    matcher             = "200-299"
+    timeout             = "30"
+    path                = "/"
+    unhealthy_threshold = "2"
+  }
 }
