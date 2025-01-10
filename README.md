@@ -1,4 +1,5 @@
 # conversion-app-infra
+This Repo supports the creation of Backend ECS Cluster for the deployment of the Conversion Application.
 
 ## Architecture Description
 
@@ -15,3 +16,9 @@
 - **IAM Roles and Policies**: IAM roles and policies to grant necessary permissions to the ECS tasks.
 
 ## Architecture Diagram
+
+## GitHub Actions Workflow
+
+**Workflow**: **Terraform_Backend_Infra_Creation**
+
+This Workflow creates backend Infrastructure for storing the Terraform State file and this workflow needs to be run **ONLY ONCE** by the infrastructure team. Dev teams will not have permission to run this workflow.
