@@ -1,6 +1,6 @@
 resource "aws_lb_target_group" "ecs-target-group" {
   name        = "${terraform.workspace}-ecs-target-group"
-  port        = "80"
+  port        = "8080"
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.conversion-app-vpc.id
