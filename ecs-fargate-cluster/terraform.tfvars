@@ -9,11 +9,24 @@ subnet_mask              = 8
 app_count                = 2
 
 
-vpc_cidr_block = {
+vpc_cidr_blocks = {
   prod = "10.0.0.0/16"
   stg  = "10.1.0.0/16"
   dev  = "10.2.0.0/16"
 }
+
+subnet_01_cidr_blocks = {
+  prod = "10.0.1.0/24"
+  stg  = "10.1.1.0/24"
+  dev  = "10.2.1.0/24"
+}
+
+subnet_02_cidr_blocks = {
+  prod = "10.0.2.0/24"
+  stg  = "10.1.2.0/24"
+  dev  = "10.2.2.0/24"
+}
+
 
 ecs_task_cpu = {
   prod = 2048

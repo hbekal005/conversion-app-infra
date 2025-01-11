@@ -8,6 +8,7 @@ resource "aws_lb" "ecs-cluster-lb" {
 
   tags = {
     Application = "${terraform.workspace}-conversion-app"
+    Name        = "${terraform.workspace}-ecs-cluster-lb"
   }
 }
 

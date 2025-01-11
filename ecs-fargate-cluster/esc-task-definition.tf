@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "ecs-task-definition" {
-  family                   = "${terraform.workspace}-conversion_app"
+  family                   = "${terraform.workspace}-conversion-app"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs-iam-role.arn
   network_mode             = "awsvpc"

@@ -54,8 +54,18 @@ variable "all_cidr_block" {
   default     = "0.0.0.0/0"
 }
 
-variable "vpc_cidr_block" {
+variable "vpc_cidr_blocks" {
   description = "CIDR Block for the  VPC"
+  type        = map(string)
+}
+
+variable "subnet_01_cidr_blocks" {
+  description = "Subnet 01 CIDR Block for the  VPC"
+  type        = map(string)
+}
+
+variable "subnet_02_cidr_blocks" {
+  description = "Subnet 02 CIDR Block for the  VPC"
   type        = map(string)
 }
 

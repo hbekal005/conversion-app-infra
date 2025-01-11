@@ -5,9 +5,7 @@ data "aws_availability_zones" "ecs-available-zones" {
 
 # Creating a VPC
 resource "aws_vpc" "conversion-app-vpc" {
-  cidr_block       = var.vpc_cidr_block[terraform.workspace]
-  instance_tenancy = "default"
-
+  cidr_block = var.vpc_cidr_blocks[terraform.workspace]
   tags = {
     Name = "${terraform.workspace}-conversion-app-vpc"
   }
@@ -19,7 +17,7 @@ resource "aws_vpc" "conversion-app-vpc" {
 # The cidrsubnet function is used to calculate the CIDR block for each subnet
 resource "aws_subnet" "ecs-subnet-01" {
   vpc_id                  = aws_vpc.conversion-app-vpc.id
-  cidr_block              = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count)
+  cidr_block              = var.subnet_01_cidr_blocks[terraform.workspace]
   availability_zone       = element(data.aws_availability_zones.ecs-available-zones.names, 0)
   map_public_ip_on_launch = true
   tags = {
@@ -29,7 +27,7 @@ resource "aws_subnet" "ecs-subnet-01" {
 
 resource "aws_subnet" "ecs-subnet-02" {
   vpc_id                  = aws_vpc.conversion-app-vpc.id
-  cidr_block              = cidrsubnet(var.vpc_cidr_block[terraform.workspace], var.subnet_mask, var.subnet_count + 1)
+  cidr_block              = var.subnet_02_cidr_blocks[terraform.workspace]
   availability_zone       = element(data.aws_availability_zones.ecs-available-zones.names, 1)
   map_public_ip_on_launch = true
   tags = {
@@ -52,18 +50,10 @@ resource "aws_internet_gateway" "conversion-app-igw" {
 # Creating a ECS Route Table
 resource "aws_route_table" "ecs-route-table" {
   vpc_id = aws_vpc.conversion-app-vpc.id
-  tags = {
-    Name = "${terraform.workspace}-ecs-route-table"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.conversion-app-igw.id
   }
-}
-
-
-
-# Create Routes for the ECS Route Table
-resource "aws_route" "ecs-route" {
-  route_table_id         = aws_route_table.ecs-route-table.id
-  destination_cidr_block = var.all_cidr_block
-  gateway_id             = aws_internet_gateway.conversion-app-igw.id
 }
 
 
