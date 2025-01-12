@@ -22,3 +22,16 @@ This Repo supports the creation of Backend ECS Cluster for the deployment of the
 **Workflow**: **Terraform_Backend_Infra_Creation**
 
 This Workflow creates backend Infrastructure for storing the Terraform State file and this workflow needs to be run **ONLY ONCE** by the infrastructure team. Dev teams will not have permission to run this workflow.
+
+To run **Terraform_Backend_Infra_Creation** navigate to GitHub Actions Tag and RUN the workflow for the  **main** branch
+
+**NOTE: NO NEED TO RUN THE WORKFLOW IF BACKEND (S3 & DYNAMODB) IS ALREDY CREATED IN AWS**
+
+To Run the worlflow for New AWS Account / Backend please follow below Process:
+
+1. Generate **AWS_ACCESS_KEY_ID** and **AWS_SECRET_ACCESS_KEY** for the new AWS Account with Admin role and AWS CLI Access.
+2. Update above keys in the **Github** >> **Setting** >> **Security** >> **Secrets and Variables** >> **Action** >> **Secrets** accordingly.
+3. Update S3 Bucket Name and DynamoDB Name in the file **conversion-app-infra/backend-infra-prerequisites/terraform.tfvars**.
+4. Ensure that the same S3 bucket Name and DynamoDB Name is updated in the file  **conversion-app-infra/ecs-fargate-cluster/terraform.tfvars**
+5. Merge both the changes to the main branch.
+6. Run the workflow **Terraform_Backend_Infra_Creation** for the Github Actions Tab.
