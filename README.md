@@ -1,6 +1,13 @@
 # conversion-app-infra
 This Repo supports the creation of Backend ECS Cluster for the deployment of the Conversion Application.
 
+**GitHub Actions Varibles in conversion-infra-app Repo**
+- **AWS_REGION** : "us-east-1"
+
+**GitHub Actions Secrets in conversion-infra-app Repo**
+- **AWS_ACCESS_KEY_ID** : hidden
+- **AWS_SECRET_ACCESS_KEY** : hidden
+
 ## Architecture Description
 
 - **VPC**: A Virtual Private Cloud (VPC) to host all the resources.
@@ -21,6 +28,8 @@ This Repo supports the creation of Backend ECS Cluster for the deployment of the
 
 ## GitHub Actions Workflow
 
+### Terraform_Backend_Workflow
+
 ![Terraform Backend Workflow](images/Terraform_Backend_Workflow.jpeg)
 
 **Workflow**: **Terraform_Backend_Infra_Creation**
@@ -39,3 +48,18 @@ To Run the worlflow for New AWS Account / Backend please follow below Process:
 4. Ensure that the same **S3 bucket Name** and **DynamoDB Name** is updated in the file  **conversion-app-infra/ecs-fargate-cluster/terraform.tfvars**
 5. Merge both the changes to the **main** branch.
 6. Run the workflow **Terraform_Backend_Infra_Creation** form the Github Actions Tab for the **main** branch.
+
+
+### App Infra Deprovision Workflow
+
+**WorkFLow** : **App_Infra_Deprovision**
+
+This Workflow will be used for deprovisioning the infrastructure for the application for individual environments.
+
+Workflow needs to be run **ONLY ONCE** by the infrastructure team. Dev teams will not have permission to run this workflow.
+
+
+#### Available Deployment Environments (case sensitive)
+- **dev**
+- **stg**
+- **prod**
