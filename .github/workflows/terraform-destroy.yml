@@ -22,8 +22,8 @@ on:
         default: "dev"
 
 jobs:
-  App_Deploy:
-    name: Deplpy
+  Infra_Deprovision:
+    name: Deprovision
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Infra Repository
